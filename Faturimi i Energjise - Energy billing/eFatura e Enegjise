@@ -1,0 +1,120 @@
+//Program i strukturuar  me Funksione per FATUREN ELEKTRIKE
+#include <iostream>
+#include <iomanip>
+using namespace std;
+int opsioni;			// zgjedhja qe ben perdoruesi
+const float tarifa1=5.65;
+const float tarifa2=7.88;
+const float tarifa3=8.96;
+const float tarifa4=10.34;
+double kosto; 			  //kostoja per kwh 
+double kosto_totale = 0; //totali kostos per te gjithe konsumatoret
+int totali_kwh = 0; 	//numri i KWH per te gjithe konsumatoret 
+int kwh=0;  		   //kilovatet per konsumatorin
+int numri=0;
+const int m=10, n=3;
+double tabela[m][n];
+double llogarit_shpenzimet(int konsumatori,int leximi_kwh) 
+ {
+	if (leximi_kwh <= 300) 
+		{ 
+		 	kosto = ((leximi_kwh) * (tarifa1)); 
+		} 
+	else if (leximi_kwh <= 600) 
+			{ 			
+				kosto = (300 * tarifa1) + (leximi_kwh -300) *tarifa2; 
+			} 
+		else if (leximi_kwh <= 1000) 
+			{ 
+			 	kosto = (300 * tarifa1) + ((300) * (tarifa2))  + ((leximi_kwh - 600) * (tarifa3));
+			} 
+		else  
+			{ 
+				kosto = ((300) * (tarifa1)) + ((300) * (tarifa2))  + ((400) * (tarifa3)) +  ((leximi_kwh -1000) * (tarifa4));
+			} 
+return kosto; 
+}
+void mbush_tabelen(int konsumatori, double kwh, double kosto)
+	{
+		tabela[numri][0] = konsumatori; 
+		tabela[numri][1] = kwh; 
+		tabela[numri][2] = kosto; 
+		numri++; 
+	}
+
+void afisho_tabelen()
+{
+cout << "\n************************************\n"; 
+cout.width(9); 
+cout << "Kons"; 
+cout.width(9); 
+cout << "kWh"; 
+cout.width(9); 
+cout << "Kosto"; 
+cout << "\n------------------------------------\n"; 
+for (int i=0;i<m;i++) 
+	{ 
+	 	for (int j=0;j<n;j++)  
+		{ 
+	 		if ((j==0) || (j==1)) 
+			{ 
+				 cout.width(9); 
+				 cout << fixed << showpoint << setprecision(0);  
+				 cout << tabela[i][j]; 
+			} 
+	 		else 
+			{ 
+				 cout.width(9); 
+				 cout << fixed << showpoint << setprecision(2);  
+				 cout << tabela[i][j]; 
+			} 
+		} 
+ 		kosto_totale += tabela[i][2]; 
+		totali_kwh=totali_kwh+tabela[i][1]; 
+		cout << "\n"; 
+ 	} 
+	 cout << "\n------------------------------------\n";
+	 cout << "   TOTALI"; 
+	 cout.width(9); 
+	 cout << fixed << showpoint << setprecision(2);  
+	 cout << totali_kwh; 
+	 cout.width(9); 
+	 cout << fixed << showpoint << setprecision(2);  
+	 cout << kosto_totale;
+	 cout << "\n************************************\n";     
+}
+void paneli()
+{
+cout << "\n************************************ "  
+	 << "\n\t  PANELI KOMANDUES" 
+	 << "\n-----------------------------------" 
+	 << "\n[1] Llogarit energjine e shpenzuar. " 
+	 << "\n[2] Afisho tabelen e konsumatoreve. " 
+	 << "\n[3] Mbyll aplikacionin " 
+	 << "\n-----------------------------------" ; 
+cout << "\n\n Zgjidh nje opsion nga 1 deri ne 3: ";
+cout << "\n************************************\n ";
+cout << "Zgjedhja juaj: ";   
+cin >> opsioni; 
+switch (opsioni) 
+{ 
+case 1: 
+		cout << "\n Jepni konsumin mujor ne kwh te klienteve:\n";
+		for (int i=0;i<m;i++) 
+		{ 
+			 cout << " Klienti " << i+1 <<" ="; cin >> kwh; 
+			 llogarit_shpenzimet(i+1,kwh); 
+			 mbush_tabelen(i+1,kwh,kosto);  
+		} 
+		paneli(); break; 
+case 2: afisho_tabelen(); paneli(); break; 
+case 3: exit(0); break; 
+default: cout << "\n\t\t Duhet te zgjidhni nje numer nga 1 deri ne 3\n\n"; paneli(); 
+} 
+}
+// Funksioni kryesor
+int main()
+{
+paneli(); 
+return (0); 
+}
